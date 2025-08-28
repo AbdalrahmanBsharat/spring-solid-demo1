@@ -1,0 +1,52 @@
+SRP — Single Responsibility
+
+Idea: a class should have one reason to change.
+The example: we split invoice work into:
+
+InvoiceCalculator (totals only)
+
+InvoicePrinter (format text only)
+
+InMemoryInvoiceRepository (persistence only)
+SrpController composes them.
+Run: GET /solid/srp/demo → JSON with id, total, and a printed invoice string.
+//-------------------------------------------------------------------------------------
+OCP — Open/Closed
+
+Idea: open for extension, closed for modification.
+The example: a DiscountPolicy interface with implementations (NoDiscount, SeasonalDiscount, LoyaltyDiscount). CheckoutService uses a map of policies; add a new discount by adding a class—no service changes.
+Run:
+
+GET /solid/ocp/pay?amount=100
+
+GET /solid/ocp/pay?amount=100&policy=seasonal
+
+GET /solid/ocp/pay?amount=100&policy=loyalty
+//-------------------------------------------------------------------------------------
+LSP — Liskov Substitution
+
+Idea: subtypes must be usable wherever the base type is expected.
+The example: Shape interface with Rectangle, Square, Circle each implementing area(). LspController treats them uniformly as Shape.
+Run: GET /solid/lsp/areas → list of shapes with computed areas.
+//-------------------------------------------------------------------------------------
+ISP — Interface Segregation
+
+Idea: prefer many small, client-specific interfaces over one fat one.
+The example: PrintDevice and ScanDevice are separate. SimplePrinter implements only print; MultiFunctionMachine implements both. IspController depends on the narrow interfaces it needs.
+Run:
+
+GET /solid/isp/print?doc=Report
+
+GET /solid/isp/scan
+//-------------------------------------------------------------------------------------
+DIP — Dependency Inversion
+
+Idea: high-level modules depend on abstractions, not concrete classes.
+The example: OrderService depends on OrderRepo (interface). InMemoryOrderRepo is one implementation; you could swap to a JPA repo without touching the service/controller.
+Run:
+
+GET /solid/dip/create?name=Milk
+
+GET /solid/dip/all
+
+All examples live under com.example.demo.solid.{srp|ocp|lsp|isp|dip}.
